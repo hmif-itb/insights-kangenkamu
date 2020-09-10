@@ -1,0 +1,52 @@
+.root {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+}
+
+.main {
+    background: #121212;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    max-width: 450px;
+}
+
+@media only screen and (min-width: 450px) {
+    .root {
+        padding: 32px 16px;
+    }
+    .main {
+        border-radius: 6px;
+        max-height: 800px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    }
+}
+
+.ComposePage {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.large-title {
+    font-weight: 900;
+    font-size: 36px;
+}
+
+.subtitle {
+    font-size: 20px;
+    margin-top: 32px;
+}
+
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}

@@ -144,7 +144,7 @@ const ComposePage: React.FC = () => {
                     <b className="text-yellow">#KangenKamu</b>
                 </Box>
                 <Box>
-                    <Button variant="contained" color="primary" disableElevation>
+                    <Button variant="contained" color="primary" disableElevation disabled={sending} onClick={() => submitResponse()}>
                         Kirim
                     </Button>
                 </Box>
@@ -166,6 +166,7 @@ const ComposePage: React.FC = () => {
                             onInputChange={handleInputChange}
                             filterOption={filterOption}
                             placeholder=""
+                            disabled={sending}
                             onChange={(value: any) => {
                                 setTo(value.map((v: any) => v.value));
                             }}
@@ -234,6 +235,7 @@ const ComposePage: React.FC = () => {
                         multiline
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
+                        disabled={sending}
                         inputProps={{
                             maxLength: 200,
                             style: {

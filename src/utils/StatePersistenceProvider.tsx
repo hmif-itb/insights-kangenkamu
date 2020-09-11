@@ -15,6 +15,7 @@ const StatePersistenceProvider: React.FC = (props) => {
 
     useEffect(() => {
         setCookie('state', state);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state]);
 
     return <>{props.children}</>;

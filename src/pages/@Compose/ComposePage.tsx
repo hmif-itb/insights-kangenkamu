@@ -89,6 +89,7 @@ const ComposePage: React.FC = () => {
 
     useEffect(() => {
         setFrom(nimSelector);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [nim])
 
     const [menuOpen, setMenuOpen] = useState(false);

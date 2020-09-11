@@ -79,7 +79,8 @@ const ComposePage: React.FC = () => {
     const history = useHistory();
 
     const nim = cookies.get("nim") || '';
-    const name = cookies.get("name") || '';
+    const sender = StudentsData.find(s => s.value === nim);
+    const name = sender ? sender.name : '';
     const nimSelector = "nim:" + nim;
 
     const [menuOpen, setMenuOpen] = useState(false);
@@ -125,17 +126,19 @@ const ComposePage: React.FC = () => {
 
     const submitResponse = () => {
         setSending(true);
+
+        const headers = {
+            token: cookies.get('jwt')
+        };
+
+        const body = {
+            message,
+            from,
+            to: to.join(',')
+        }
+
         axios
-            .post('/.netlify/functions/submit',
-                {
-                    message, from, to: to.join(',')
-                }, 
-                {
-                    headers: {
-                        token: cookies.get('jwt')
-                    }
-                }
-            )
+            .post('/.netlify/functions/submit', body, { headers })
             .then(() => {
                 history.replace('/sent');
             })

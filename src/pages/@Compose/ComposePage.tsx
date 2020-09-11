@@ -14,10 +14,9 @@ import { useHistory } from "react-router-dom";
 import "./style.css";
 import StudentsData from "./mhs.json";
 import { Option } from "react-select/src/filters";
-import Cookies from 'universal-cookie';
+import { useCookies } from 'react-cookie';
 
 const options = StudentsData;
-const cookies = new Cookies();
 
 const selectStyles = {
     control: (provided: any, state: any) => ({
@@ -77,8 +76,9 @@ const jurusanPrefix: { [prefix: string]: string } = {
 
 const ComposePage: React.FC = () => {
     const history = useHistory();
+    const [cookies] = useCookies(['kangenkamu']);
 
-    const nim = cookies.get("nim") || '';
+    const nim = cookies.nim || '';
     const sender = StudentsData.find(s => s.value === nim);
     const name = sender ? sender.name : '';
     const nimSelector = "nim:" + nim;
@@ -178,7 +178,7 @@ const ComposePage: React.FC = () => {
                             placeholder=""
                             disabled={sending}
                             onChange={(value: any) => {
-                                setTo(value.map((v: any) => v.value));
+                                setTo(value?.map((v: any) => v.value));
                             }}
                         />
                     </Box>

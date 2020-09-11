@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const qs = require('querystring')
 const axios = require("axios");
 
 exports.handler = async function(event, context) {
@@ -47,6 +48,10 @@ async function submitResponse(from, to, message) {
         [messageEntryId]: message
     };
 
-    const response = await axios.post(postUrl, body);
+    const headers = {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+
+    const response = await axios.post(postUrl, qs.stringify(body), { headers });
     return response;
 }

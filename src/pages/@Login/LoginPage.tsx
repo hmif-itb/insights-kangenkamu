@@ -2,20 +2,21 @@ import React, { useEffect } from "react";
 import qs from "querystring";
 import axios from "axios";
 import { useLocation, useHistory } from "react-router-dom";
-import { useCookies } from 'react-cookie';
+import { UIStore } from "../../stores/UIStore";
 
 const LoginPage: React.FC = () => {
   const location = useLocation();
   const history = useHistory();
-  const setCookie = useCookies(['kangenkamu'])[1];
 
   const fetchToken = (idToken: string) => {
     axios.post("/.netlify/functions/login", { idToken }).then((res) => {
       const { token, nim } = res.data;
       history.replace("/compose");
 
-      setCookie('jwt', token, { path: '/', expires: new Date(Date.now() + (3600 * 1000)) });
-      setCookie('nim', nim, { path: '/', expires: new Date(Date.now() + (3600 * 1000)) });
+      UIStore.update(s => {
+        s.jwt = token;
+        s.nim = nim;
+      })
     });
   };
 

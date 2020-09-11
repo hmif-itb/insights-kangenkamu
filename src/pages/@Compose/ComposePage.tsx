@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Drawer from "@material-ui/core/Drawer";
@@ -7,14 +7,18 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import InputBase from '@material-ui/core/InputBase';
+import Backdrop from '@material-ui/core/Backdrop';
+import Snackbar from '@material-ui/core/Snackbar';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import Select from "react-select";
-import axios from 'axios';
+import Alert from '@material-ui/lab/Alert';
 import { useHistory } from "react-router-dom";
+import Select from "react-select";
+import { Option } from "react-select/src/filters";
+import axios from 'axios';
 import "./style.css";
 import StudentsData from "./mhs.json";
-import { Option } from "react-select/src/filters";
-import { useCookies } from 'react-cookie';
+import { UIStore } from "../../stores/UIStore";
 
 const options = StudentsData;
 
@@ -76,12 +80,16 @@ const jurusanPrefix: { [prefix: string]: string } = {
 
 const ComposePage: React.FC = () => {
     const history = useHistory();
-    const [cookies] = useCookies(['kangenkamu']);
+    const nim = UIStore.useState(s => s.nim) || '';
+    const jwt = UIStore.useState(s => s.jwt) || '';
 
-    const nim = cookies.nim || '';
     const sender = StudentsData.find(s => s.value === nim);
     const name = sender ? sender.name : '';
     const nimSelector = "nim:" + nim;
+
+    useEffect(() => {
+        setFrom(nimSelector);
+    }, [nim])
 
     const [menuOpen, setMenuOpen] = useState(false);
     const [fromSelectorOpen, setFromSelectorOpen] = useState(false);
@@ -89,6 +97,8 @@ const ComposePage: React.FC = () => {
     const [to, setTo] = useState<string[]>([]);
     const [message, setMessage] = useState<string>("");
     const [sending, setSending] = useState(false);
+    const [error, setError] = useState<string>();
+    const [showError, setShowError] = useState(false);
 
     const angkatanSelector = (() => {
         const prefix = nim.substring(0, 5);
@@ -125,10 +135,21 @@ const ComposePage: React.FC = () => {
     }
 
     const submitResponse = () => {
+        if (message === '') {
+            setError('Pesan tidak boleh kosong');
+            setShowError(true);
+            return;
+        }
+        if (!to || to.length === 0) {
+            setError('Penerima pesan minimal satu');
+            setShowError(true);
+            return;
+        }
+
         setSending(true);
 
         const headers = {
-            token: cookies.jwt
+            token: jwt
         };
 
         const body = {
@@ -141,6 +162,11 @@ const ComposePage: React.FC = () => {
             .post('/.netlify/functions/submit', body, { headers })
             .then(() => {
                 history.replace('/sent');
+            })
+            .catch(e => {
+                console.log(e);
+                setError("Something went wrong...");
+                setShowError(true);
             })
             .finally(() => {
                 setSending(false);
@@ -256,6 +282,14 @@ const ComposePage: React.FC = () => {
                     />
                 </Box>
             </div>
+            <Backdrop open={sending} style={{ zIndex: 99999 }}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
+            <Snackbar open={showError} autoHideDuration={6000} onClose={() => setShowError(false)}>
+                <Alert elevation={6} variant="filled" onClose={() => setShowError(false)} severity="error">
+                    {error}
+                </Alert>
+            </Snackbar>
         </div>
     );
 };

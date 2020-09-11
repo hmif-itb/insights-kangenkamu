@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { CookiesProvider } from 'react-cookie';
 
+import StatePersistenceProvider from './utils/StatePersistenceProvider';
 import { routes } from "./routes";
 import "./App.css";
 
@@ -18,17 +19,19 @@ const theme = createMuiTheme({
 function App() {
   return (
     <CookiesProvider>
-      <ThemeProvider theme={theme}>
-        <Router>
-          {Object.keys(routes).map((route) => {
-            return (
-              <Route path={route} exact key={route}>
-                {routes[route]}
-              </Route>
-            );
-          })}
-        </Router>
-      </ThemeProvider>
+      <StatePersistenceProvider>
+        <ThemeProvider theme={theme}>
+          <Router>
+            {Object.keys(routes).map((route) => {
+              return (
+                <Route path={route} exact key={route}>
+                  {routes[route]}
+                </Route>
+              );
+            })}
+          </Router>
+        </ThemeProvider>
+      </StatePersistenceProvider>
     </CookiesProvider>
   );
 }

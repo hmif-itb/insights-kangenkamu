@@ -9,12 +9,15 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InputBase from '@material-ui/core/InputBase';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import Select from "react-select";
-
+import axios from 'axios';
+import { useHistory } from "react-router-dom";
 import "./style.css";
 import StudentsData from "./mhs.json";
 import { Option } from "react-select/src/filters";
+import Cookies from 'universal-cookie';
 
 const options = StudentsData;
+const cookies = new Cookies();
 
 const selectStyles = {
     control: (provided: any, state: any) => ({
@@ -73,13 +76,18 @@ const jurusanPrefix: { [prefix: string]: string } = {
 }
 
 const ComposePage: React.FC = () => {
-    const nim = "18217025";
-    const name = "Muhammad Aditya Hilmy";
+    const history = useHistory();
+
+    const nim = cookies.get("nim") || '';
+    const name = cookies.get("name") || '';
     const nimSelector = "nim:" + nim;
 
     const [menuOpen, setMenuOpen] = useState(false);
     const [fromSelectorOpen, setFromSelectorOpen] = useState(false);
     const [from, setFrom] = useState<string>(nimSelector);
+    const [to, setTo] = useState<string[]>([]);
+    const [message, setMessage] = useState<string>("");
+    const [sending, setSending] = useState(false);
 
     const angkatanSelector = (() => {
         const prefix = nim.substring(0, 5);
@@ -115,6 +123,20 @@ const ComposePage: React.FC = () => {
         return matchName || matchNickname;
     }
 
+    const submitResponse = () => {
+        setSending(true);
+        axios
+            .post('/.netlify/functions/submit', {
+                message, from, to: to.join(',')
+            })
+            .then(() => {
+                history.replace('/sent');
+            })
+            .finally(() => {
+                setSending(false);
+            })
+    }
+
     return (
         <div className="ComposePage">
             <Box display="flex" alignItems="center" p={2}>
@@ -124,7 +146,7 @@ const ComposePage: React.FC = () => {
                 <Box>
                     <Button variant="contained" color="primary" disableElevation>
                         Kirim
-                            </Button>
+                    </Button>
                 </Box>
             </Box>
             <div className="content">
@@ -144,6 +166,9 @@ const ComposePage: React.FC = () => {
                             onInputChange={handleInputChange}
                             filterOption={filterOption}
                             placeholder=""
+                            onChange={(value: any) => {
+                                setTo(value.map((v: any) => v.value));
+                            }}
                         />
                     </Box>
                 </Box>
@@ -205,8 +230,10 @@ const ComposePage: React.FC = () => {
                     <InputBase
                         placeholder="Kesan, pesan, pengakuan dosa, apapun. Tulis maksimal 200 karakter."
                         fullWidth
-                        style={{flex: 1, height: '100%'}}
+                        style={{ flex: 1, height: '100%' }}
                         multiline
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
                         inputProps={{
                             maxLength: 200,
                             style: {

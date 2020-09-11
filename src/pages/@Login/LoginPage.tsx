@@ -13,7 +13,7 @@ const LoginPage: React.FC = () => {
   const fetchToken = (idToken: string) => {
     axios.post("/.netlify/functions/login", { idToken }).then((res) => {
       const { token, name } = res.data;
-      history.replace("/compose/" + encodeURIComponent(token));
+      history.replace("/compose");
 
       cookies.set('jwt', token, { path: '/', expires: new Date(Date.now() + (3600 * 1000)) });
       cookies.set('name', name, { path: '/', expires: new Date(Date.now() + (3600 * 1000)) });

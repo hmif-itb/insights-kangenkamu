@@ -8,8 +8,8 @@ const StatePersistenceProvider: React.FC = (props) => {
 
     useEffect(() => {
         UIStore.update(s => {
-            s.nim = cookies.state.nim;
-            s.jwt = cookies.state.jwt;
+            s.nim = cookies.state?.nim;
+            s.jwt = cookies.state?.jwt;
         });
     }, [cookies]);
 

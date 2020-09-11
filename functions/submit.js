@@ -7,11 +7,11 @@ exports.handler = async function(event, context) {
     }
 
     const secret = process.env.JWT_SECRET || 'secret';
-    const { authorization } = event.headers;
+    const { token } = event.headers;
     const { from, to, message } = JSON.parse(event.body);
 
     try {
-        const { nim } = jwt.verify(authorization, secret);
+        const { nim } = jwt.verify(token, secret);
 
         if (from.startsWith('nim:') && from !== 'nim:' + nim) {
             return {

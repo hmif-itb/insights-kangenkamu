@@ -126,9 +126,16 @@ const ComposePage: React.FC = () => {
     const submitResponse = () => {
         setSending(true);
         axios
-            .post('/.netlify/functions/submit', {
-                message, from, to: to.join(',')
-            })
+            .post('/.netlify/functions/submit',
+                {
+                    message, from, to: to.join(',')
+                }, 
+                {
+                    headers: {
+                        token: cookies.get('jwt')
+                    }
+                }
+            )
             .then(() => {
                 history.replace('/sent');
             })

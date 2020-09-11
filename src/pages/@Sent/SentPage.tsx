@@ -2,7 +2,7 @@ import React from 'react';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
 const SentPage: React.FC = () => {
     return (

@@ -128,7 +128,7 @@ const ComposePage: React.FC = () => {
         setSending(true);
 
         const headers = {
-            token: cookies.get('jwt')
+            token: cookies.jwt
         };
 
         const body = {

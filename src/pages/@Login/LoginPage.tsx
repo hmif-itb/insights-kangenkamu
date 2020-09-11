@@ -2,6 +2,9 @@ import React, { useEffect } from "react";
 import qs from "querystring";
 import axios from "axios";
 import { useLocation, useHistory } from "react-router-dom";
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 const LoginPage: React.FC = () => {
   const location = useLocation();
@@ -9,8 +12,11 @@ const LoginPage: React.FC = () => {
 
   const fetchToken = (idToken: string) => {
     axios.post("/.netlify/functions/login", { idToken }).then((res) => {
-      const { token } = res.data;
+      const { token, name } = res.data;
       history.replace("/compose/" + encodeURIComponent(token));
+
+      cookies.set('jwt', token, { path: '/', expires: new Date(Date.now() + (3600 * 1000)) });
+      cookies.set('name', name, { path: '/', expires: new Date(Date.now() + (3600 * 1000)) });
     });
   };
 

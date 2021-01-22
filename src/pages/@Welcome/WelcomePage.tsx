@@ -29,10 +29,13 @@ const WelcomePage: React.FC = () => {
                         Jadi kalo ada kesan, pesan, pengakuan dosa, apapun, bisa banget ditulis di sini.
                     </p>
                     <p>
-                        Pesan kamu akan kami liatin ke penerima pesan <b>di akhir tahun nanti</b>. Caranya gimana? Itu kejutan, liat aja nanti.
+                        Pesan kamu akan kami liatin ke penerima pesan <b>di akhir kepengurusan lutek nanti<sup>*</sup></b>. Caranya gimana? Itu kejutan, liat aja nanti.
                     </p>
                     <p>
                         Silakan login pake akun email std.stei.itb.ac.id untuk mengirim pesanmu.
+                    </p>
+                    <p>
+                        <small>* Dalam hal lutek dua periode, kepengurusan yang dimaksud adalah yang pertama.</small>
                     </p>
                     <Box mt={1}></Box>
                     <GoogleLogin

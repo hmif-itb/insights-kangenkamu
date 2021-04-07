@@ -15,7 +15,8 @@ const WelcomePage: React.FC = () => {
         <div>
             <Container maxWidth="sm">
                 <Box p={2} display="flex" flexDirection="column" justifyContent="stretch">
-                    <h1><span className="text-yellow">#KangenKamu</span> edisi website</h1>
+                    <h1>Udah tutup gaes :(</h1>
+                    {/* <h1><span className="text-yellow">#KangenKamu</span> edisi website</h1>
                     <p>
                         HALO WARGA HMIF!!
                     </p>
@@ -44,7 +45,7 @@ const WelcomePage: React.FC = () => {
                         buttonText="Login to std.stei.itb.ac.id"
                         uxMode="redirect"
                         redirectUri={redirectUrl}
-                    />
+                    /> */}
                 </Box>
             </Container>
         </div>
